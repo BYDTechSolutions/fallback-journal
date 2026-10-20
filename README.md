@@ -18,7 +18,7 @@ This package keeps the failed write in a file instead, synced to disk before `sa
 npm install @bydtech/fallback-journal
 ```
 
-Node.js 20 or later. No runtime dependencies.
+Node.js 20 or later. No runtime dependencies. It is an ES module; a CommonJS app (a default NestJS build, say) can `require` it on Node.js 20.19+ or 22.12+.
 
 ## Quick start
 
@@ -34,7 +34,13 @@ const result = await journal.save({ email: 'someone@example.com' }, insertSignup
 console.log(result.queued ? `Kept on disk (${journal.size()} waiting)` : 'Saved');
 ```
 
-It prints `Kept on disk (1 waiting)`, and `fallback-journal.ndjson` now holds the signup. Replace `insertSignup` with a function that works and run it again: the new signup is saved, and the waiting one is saved right after it.
+It prints `Kept on disk (1 waiting)`, and `fallback-journal.ndjson` now holds the signup. Now pretend the database is back: change the insert to one that works and run it again.
+
+```js
+const insertSignup = async (signup) => console.log('inserted', signup.email);
+```
+
+It prints `inserted` twice: the new signup, then the one that was waiting, and the file is empty again.
 
 That is the whole idea: **wrap your insert in `journal.save(record, insert)`**. If the insert works, nothing else happens. If it throws, the record goes to the file and `save` resolves with `queued: true` instead of throwing. The next successful `save` replays what is waiting, or you call `journal.drain(insert)` yourself.
 
