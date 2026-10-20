@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
-import { closeSync, openSync, readFileSync, renameSync, statSync, unlinkSync, utimesSync, writeSync } from 'node:fs';
+import { closeSync, mkdirSync, openSync, readFileSync, renameSync, statSync, unlinkSync, utimesSync, writeSync } from 'node:fs';
 import { hostname } from 'node:os';
+import { dirname } from 'node:path';
 import { JournalError } from './errors.js';
 
 /**
@@ -72,8 +73,16 @@ function create(path: string): boolean {
   try {
     fd = openSync(path, 'wx', 0o600);
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
-    throw error;
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === 'EEXIST') return false;
+    if (code !== 'ENOENT') throw error;
+    mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
+    try {
+      fd = openSync(path, 'wx', 0o600);
+    } catch (retryError) {
+      if ((retryError as NodeJS.ErrnoException).code === 'EEXIST') return false;
+      throw retryError;
+    }
   }
   try {
     const info: LockInfo = { pid: process.pid, host: HOST, token: PROCESS_TOKEN };

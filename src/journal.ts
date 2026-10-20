@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { JournalError, describeError } from './errors.js';
 import {
@@ -249,6 +249,7 @@ export function createJournal<T = any>(options: JournalOptions<T> = {}): Journal
   }
 
   function read(): JournalContents<T> {
+    if (!existsSync(file)) return { entries: [], corrupt: [] };
     return withLockSync(writeLock, WRITE_LOCK, () => parseJournal<T>(readText()));
   }
 
