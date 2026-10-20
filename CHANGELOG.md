@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-21
+
+### Changed
+
+- Published from GitHub Actions through npm trusted publishing, with a
+  provenance attestation linking the package to this repository. No code changes.
+
 ## [0.1.0] - 2026-10-21
 
 ### Added
@@ -20,5 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `size()`, `pending()`, `read()` and `readJournal(file)`.
 - CLI: `fallback-journal list`, `count` and `replay --handler <module>` with `--dry-run`; exit codes 0, 1 and 2.
 
-[Unreleased]: https://github.com/BYDTechSolutions/fallback-journal/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/BYDTechSolutions/fallback-journal/releases/tag/v0.1.0
+[Unreleased]: https://github.com/BYDTechSolutions/fallback-journal/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/BYDTechSolutions/fallback-journal/releases/tag/v0.1.1
+[0.1.0]: https://github.com/BYDTechSolutions/fallback-journal/tree/86ce0fb3a8f534447a57bebf3ab2a95a2d1d85e6

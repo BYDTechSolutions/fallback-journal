@@ -1,6 +1,6 @@
 {
   "name": "@bydtech/fallback-journal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "When a database write fails, keep the record on disk as one JSON line and save it later, so a restart never loses a signup, a lead or an order.",
   "keywords": [
     "journal",
